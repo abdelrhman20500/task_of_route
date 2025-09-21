@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../data/model/products.dart';
@@ -8,6 +9,7 @@ class ItemProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
     return Container(
       height: MediaQuery.of(context).size.height * 0.36,
       width: MediaQuery.of(context).size.width * 0.5,
@@ -23,59 +25,42 @@ class ItemProduct extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12.0),
-                  child: Image.network(
-                    products.images![0],
-                    fit: BoxFit.cover,
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    width: double.infinity,
-                    loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child; // Show the image when it's fully loaded
-                      }
-                      // Show shimmer effect while loading
-                      return _buildShimmerEffect(context);
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: MediaQuery.of(context).size.height * 0.2,
+                  borderRadius: BorderRadius.circular(12),
+                  child: CachedNetworkImage(
+                    imageUrl: products.images![0],
+                    fit: BoxFit.fill,
+                    height: height * 0.17, // Adjust height
+                    width: double.infinity, // Full width
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Colors.grey[700]!,
+                      highlightColor: Colors.grey[500]!,
+                      child: Container(
+                        height: height * 0.2,
                         width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.0),
-                          color: Colors.grey[300], // Placeholder color for error
-                        ),
-                        child: const Icon(Icons.error), // Error icon
-                      );
-                    },
+                        color: Colors.grey,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                    const Icon(Icons.error),
                   ),
                 ),
                 Positioned(
-                  top: 6,
-                  right: 10,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.9),
-                          spreadRadius: 2,
-                          blurRadius: 4,
-                          offset: const Offset(0, 3), // Adjust the offset to change the shadow position
-                        ),
-                      ],
-                    ),
-                    child: CircleAvatar(
-                      radius: 16,
-                      backgroundColor: Colors.white,
-                      child: Center(
-                        child: InkWell(
-                          onTap: () {},
-                          child: const Icon(Icons.favorite_border_sharp, color: Colors.blue),
-                        ),
-                      ),
+                  top: 4.0,
+                  right: 4.0,
+                  child: CircleAvatar(
+                    backgroundColor:
+                    Colors.white, // 🔵 Your custom color
+                    radius: 24, // You can adjust size as needed
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.favorite_border,
+                        color: Colors.blue,
+                        size: 28,
+                      ), // Contrast color
                     ),
                   ),
-                )
+                ),
               ],
             ),
             const SizedBox(height: 4),
@@ -126,19 +111,19 @@ class ItemProduct extends StatelessWidget {
     );
   }
 
-  Widget _buildShimmerEffect(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Colors.white,
-      highlightColor: Colors.grey.shade300,
-      direction: ShimmerDirection.ltr,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.2,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.0),
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
+  // Widget _buildShimmerEffect(BuildContext context) {
+  //   return Shimmer.fromColors(
+  //     baseColor: Colors.white,
+  //     highlightColor: Colors.grey.shade300,
+  //     direction: ShimmerDirection.ltr,
+  //     child: Container(
+  //       height: MediaQuery.of(context).size.height * 0.2,
+  //       width: double.infinity,
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(12.0),
+  //         color: Colors.white,
+  //       ),
+  //     ),
+  //   );
+  // }
 }

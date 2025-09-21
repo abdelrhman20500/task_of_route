@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:task_of_route/Features/home/presentation/views/home_screen.dart';
-import 'Features/home/data/api_manager/api_manager.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_of_route/Features/home/presentation/views/product_screen.dart';
+import 'Core/uitis/set_up_service_locator.dart';
+import 'Core/uitis/simple_bloc_observer.dart';
 
 
 
 void main() {
-  ApiManager.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  setUpServiceLocator();
+  Bloc.observer= SimpleBlocObserver();
   runApp(const MyApp());
 }
 
@@ -14,13 +18,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ApiManager.getProduct();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        HomeScreen.routeName:(_)=>const HomeScreen(),
+        ProductScreen.routeName:(_)=>const ProductScreen(),
       },
-      initialRoute: HomeScreen.routeName,
+      initialRoute: ProductScreen.routeName,
     );
   }
 }

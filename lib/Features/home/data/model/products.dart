@@ -1,13 +1,13 @@
 
-class AllProducts {
+class ProductModel {
   List<Products>? products;
   int? total;
   int? skip;
   int? limit;
 
-  AllProducts({this.products, this.total, this.skip, this.limit});
+  ProductModel({this.products, this.total, this.skip, this.limit});
 
-  AllProducts.fromJson(Map<String, dynamic> json) {
+  ProductModel.fromJson(Map<String, dynamic> json) {
     if(json["products"] is List) {
       products = json["products"] == null ? null : (json["products"] as List).map((e) => Products.fromJson(e)).toList();
     }
